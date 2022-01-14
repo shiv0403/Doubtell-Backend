@@ -19,6 +19,7 @@ app.use(
 
 const authRoutes = require("./routes/auth");
 const uploadImgRoute = require("./routes/uploadImg");
+const doubtRoutes = require("./routes/doubt");
 
 dotenv.config();
 
@@ -35,6 +36,7 @@ mongoose.connect(process.env.MONGO_URL, (err) => {
 
 app.use("/api/auth", authRoutes);
 app.use("/api/upload-img", uploadImgRoute);
+app.use("/api/doubt", doubtRoutes);
 
 app.get("/", (req, res) => {
   res.send("This is home route");
