@@ -2,11 +2,23 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const helmet = require("helmet");
+const cors = require("cors");
+const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+app.use("/public", express.static("public"));
+
+app.use(
+  cors({
+    AccessControlAllowOrigin: "http://localhost:300",
+  })
+);
 
 const authRoutes = require("./routes/auth");
+const uploadImgRoute = require("./routes/uploadImg");
 
 dotenv.config();
 
@@ -22,6 +34,7 @@ mongoose.connect(process.env.MONGO_URL, (err) => {
 });
 
 app.use("/api/auth", authRoutes);
+app.use("/api/upload-img", uploadImgRoute);
 
 app.get("/", (req, res) => {
   res.send("This is home route");
