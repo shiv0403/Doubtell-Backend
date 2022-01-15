@@ -6,7 +6,7 @@ const userSchema = new Schema(
   {
     name: {
       type: String,
-      required: true,
+      required: [true, "Please enter your name"],
     },
     email: {
       type: String,
@@ -24,10 +24,7 @@ const userSchema = new Schema(
       type: Number,
       required: [true, "Please enter your age"],
     },
-    school: {
-      type: String,
-      required: [true, "Please enter your school name"],
-    },
+
     user_doubts: [{ type: Schema.Types.ObjectId, ref: "Doubt" }],
     user_answers: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],
