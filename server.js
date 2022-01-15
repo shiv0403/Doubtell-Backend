@@ -17,7 +17,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(
   cors({
-    AccessControlAllowOrigin: "http://localhost:300",
+    AccessControlAllowOrigin: "http://localhost:3000",
   })
 );
 app.use("/public", express.static("public"));
