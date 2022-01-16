@@ -40,6 +40,7 @@ const signup_post = async (req, res) => {
 };
 
 const logout_get = (req, res) => {
+  console.log("logout route!");
   res.cookie("jwt", "", { maxAge: 1 });
   res.status(200).send({ msg: "logged out" });
 };

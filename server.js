@@ -43,11 +43,11 @@ mongoose.connect(process.env.MONGO_URL, (err) => {
 });
 
 //global app middlewares for routes
+app.get("*", checkUser);
 app.use("/api/auth", authRoutes);
 app.use("/api/upload-img", uploadImgRoute);
 app.use("/api/doubt", doubtRoutes);
 
-app.get("*", checkUser);
 app.get("/", (req, res) => {
   res.send("This is home route");
 });
