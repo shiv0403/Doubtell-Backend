@@ -6,11 +6,13 @@ const helmet = require("helmet");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 
 const app = express();
 dotenv.config();
 
 //basic middlewares
+app.use(cookieParser());
 app.use(morgan("tiny"));
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
