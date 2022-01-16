@@ -19,7 +19,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(
   cors({
-    AccessControlAllowOrigin: "http://localhost:3000",
+    origin: "http://localhost:3000",
+    credentials: true,
   })
 );
 app.use("/public", express.static("public"));
@@ -28,6 +29,7 @@ app.use("/public", express.static("public"));
 const authRoutes = require("./routes/auth");
 const uploadImgRoute = require("./routes/uploadImg");
 const doubtRoutes = require("./routes/doubt");
+const { checkUser } = require("./Middlewares/authMiddleware");
 
 const PORT = process.env.PORT || 8080;
 
@@ -45,6 +47,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/upload-img", uploadImgRoute);
 app.use("/api/doubt", doubtRoutes);
 
+app.get("*", checkUser);
 app.get("/", (req, res) => {
   res.send("This is home route");
 });
