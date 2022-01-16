@@ -38,7 +38,13 @@ const signup_post = async (req, res) => {
   }
 };
 
+const logout_get = (req, res) => {
+  res.cookie("jwt", "", { maxAge: 1 });
+  res.status(200).send({ msg: "logged out" });
+};
+
 module.exports = {
   login_post,
   signup_post,
+  logout_get,
 };
