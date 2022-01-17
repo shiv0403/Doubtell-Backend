@@ -2,7 +2,6 @@ const multer = require("multer");
 const mongoose = require("mongoose");
 const router = require("express").Router();
 const crypto = require("crypto");
-const Img = require("../models/imgUpload");
 const path = require("path");
 const { GridFsStorage } = require("multer-gridfs-storage");
 const Grid = require("gridfs-stream");
@@ -26,6 +25,7 @@ const storage = new GridFsStorage({
           return reject(err);
         }
         const filename = buf.toString("hex") + path.extname(file.originalname);
+        console.log(filename);
         const fileInfo = {
           filename: filename,
           bucketName: "uploads",
@@ -36,66 +36,34 @@ const storage = new GridFsStorage({
   },
 });
 
-// const storage = multer.diskStorage({
-//   destination: function (request, file, callback) {
-//     callback(null, "./public/uploads/images");
-//   },
-//   filename: function (request, file, callback) {
-//     callback(null, Date.now() + "-" + file.originalname);
-//   },
-// });
-
 const upload = multer({
   storage: storage,
+  limits: {
+    fileSize: 1 * 1024 * 1024,
+  },
 });
 
-router.get("/doubt-img/:filename", (req, res) => {
-  const filename = req.params.filename;
-  gfs.files.findOne({ filename }, (err, file) => {
-    //if image exists
-    if (!file || file.length === 0) {
-      res.status(404).send({ err: "file not found!" });
-    }
-    //  if file is really an image
-    if (file.contentType === "image/jpeg" || file.contentType === "image/png") {
-      const readStream = gfs.createReadStream(file.filename);
-      readStream.pipe(res);
-    } else {
-      res.status(404).send({ err: "Not an image" });
-    }
-  });
-});
-
-router.post("/doubt-img", upload.single("img"), (req, res) => {
-  console.log(req.file);
-  const url =
-    req.protocol +
-    "://" +
-    req.get("host") +
-    "/api/upload-img/doubt-img/" +
-    req.file.filename;
-
-  res.status(201).send({ url });
-});
-
-// router.post("/doubt-img", upload.single("img"), (req, res) => {
-//   const url = req.protocol + "://" + req.get("host");
-//   const img = new Img({
-//     img: url + "/api/upload-img/doubt-img/" + req.file.filename,
+// router.get("/doubt-img/:filename", (req, res) => {
+//   const filename = req.params.filename;
+//   gfs.files.findOne({ filename }, (err, file) => {
+//     //if image exists
+//     if (!file || file.length === 0) {
+//       res.status(404).send({ err: "file not found!" });
+//     }
+//     //  if file is really an image
+//     if (file.contentType === "image/jpeg" || file.contentType === "image/png") {
+//       const readStream = gfs.createReadStream(file.filename);
+//       readStream.pipe(res);
+//     } else {
+//       res.status(404).send({ err: "Not an image" });
+//     }
 //   });
-//   img
-//     .save()
-//     .then((result) => {
-//       res.status(201).send({
-//         msg: "image uploaded successfully",
-//         url:
-//           "http://localhost:8080/api/upload-img/doubt-img/" + req.file.filename,
-//       });
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//       res.status(500).send({ msg: "failed to upload image" });
-//     });
 // });
+
+router.post("/doubt-img/images", upload.array("img", 5), (req, res) => {
+  console.log("files", req.files);
+
+  res.status(201).send(req.files);
+});
 
 module.exports = router;

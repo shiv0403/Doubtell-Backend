@@ -9,6 +9,7 @@ const doubtSchema = new Schema({
   author_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
+    required: true,
   },
   stars: {
     type: Number,
@@ -24,6 +25,7 @@ const doubtSchema = new Schema({
     type: String,
     required: true,
   },
+  doubt_imgs: [{ type: String }],
 });
 
 const Doubt = mongoose.model("Doubt", doubtSchema);
