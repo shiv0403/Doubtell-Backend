@@ -3,9 +3,11 @@ const { handleErrors } = require("../utils/authErrors");
 const { createToken } = require("../utils/jwt");
 
 const login_post = async (req, res) => {
+  console.log(User.findOne({ email: "shivi@email.com" }));
   const { email, password } = req.body.data;
   try {
     const user = await User.login(email, password);
+    console.log(user);
     const token = createToken(user._id, user.name, user.email);
     res.cookie("jwt", token, {
       httpOnly: true,

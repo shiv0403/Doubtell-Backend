@@ -20,6 +20,10 @@ const doubtSchema = new Schema({
       ref: "Answer",
     },
   ],
+  category: {
+    type: String,
+    required: true,
+  },
 });
 
 const Doubt = mongoose.model("Doubt", doubtSchema);
