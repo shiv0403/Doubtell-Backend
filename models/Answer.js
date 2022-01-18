@@ -8,6 +8,13 @@ const answerSchema = new Schema(
       ref: "User",
       required: true,
     },
+    author_name: {
+      type: String,
+      required: true,
+    },
+    author_imgUrl: {
+      type: String,
+    },
     doubt_id: {
       type: Schema.Types.ObjectId,
       ref: "Doubt",

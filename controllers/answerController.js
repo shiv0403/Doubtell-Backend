@@ -1,5 +1,6 @@
 const Answer = require("../models/Answer");
 const Doubt = require("../models/Doubt");
+const User = require("../models/User");
 const mongoose = require("mongoose");
 
 const answers_post = async (req, res) => {
@@ -25,12 +26,13 @@ const answers_post = async (req, res) => {
 };
 
 const answer_post = async (req, res) => {
-  const { content, doubtId, authorId } = req.body;
+  const { content, doubtId, authorId, authorName } = req.body;
   try {
     const answer = await Answer.create({
       author_id: authorId,
       answer: content,
       doubt_id: doubtId,
+      author_name: authorName,
     });
     const updateDoubt = await Doubt.updateOne(
       { _id: answer.doubt_id },
@@ -40,7 +42,15 @@ const answer_post = async (req, res) => {
         },
       }
     );
-    console.log(updateDoubt);
+    const updatedUser = await User.updateOne(
+      { _id: answer.author_id },
+      {
+        $push: {
+          user_answers: answer._id,
+        },
+      }
+    );
+
     res.status(201).send(answer);
   } catch (err) {
     console.log(err);

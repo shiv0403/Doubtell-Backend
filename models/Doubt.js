@@ -11,6 +11,13 @@ const doubtSchema = new Schema({
     ref: "User",
     required: true,
   },
+  author_name: {
+    type: String,
+    required: true,
+  },
+  author_imgUrl: {
+    type: String,
+  },
   stars: {
     type: Number,
     default: 0,
