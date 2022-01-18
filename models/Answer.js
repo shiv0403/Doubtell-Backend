@@ -6,9 +6,16 @@ const answerSchema = new Schema(
     author_id: {
       type: Schema.Types.ObjectId,
       ref: "User",
+      required: true,
+    },
+    doubt_id: {
+      type: Schema.Types.ObjectId,
+      ref: "Doubt",
+      required: true,
     },
     answer: {
       type: String,
+      required: true,
     },
     likes: {
       type: Number,

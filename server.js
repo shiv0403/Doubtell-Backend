@@ -39,6 +39,8 @@ app.use("/public", express.static("public"));
 const authRoutes = require("./routes/auth");
 const uploadImgRoute = require("./routes/uploadImg");
 const doubtRoutes = require("./routes/doubt");
+const userRoutes = require("./routes/user");
+const answerRoutes = require("./routes/answer");
 const { checkUser } = require("./Middlewares/authMiddleware");
 
 const PORT = process.env.PORT || 8080;
@@ -48,6 +50,8 @@ app.get("*", checkUser);
 app.use("/api/auth", authRoutes);
 app.use("/api/upload-img", uploadImgRoute);
 app.use("/api/doubt", doubtRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/answer", answerRoutes);
 
 app.get("/", (req, res) => {
   res.send("This is home route");
