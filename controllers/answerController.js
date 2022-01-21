@@ -58,4 +58,20 @@ const answer_post = async (req, res) => {
   }
 };
 
+const answer_like = async (req, res) => {
+  const { answerId } = req.body;
+
+  try {
+    const updatedAnswer = await Answer.updateOne(
+      { _id: answerId },
+      {
+        $set: {},
+      }
+    );
+  } catch (err) {
+    console.log(err);
+    res.status(400).send({ err: "Failed to like the answer" });
+  }
+};
+
 module.exports = { answer_post, answers_post };
