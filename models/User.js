@@ -30,6 +30,8 @@ const userSchema = new Schema(
     },
     user_likedPosts: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
     user_dislikedPosts: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
+    user_bookmarks: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
+    user_starredDoubts: [{ type: Schema.Types.ObjectId, ref: "Doubt" }],
     user_doubts: [{ type: Schema.Types.ObjectId, ref: "Doubt" }],
     user_answers: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],

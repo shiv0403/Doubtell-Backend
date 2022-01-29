@@ -42,4 +42,25 @@ const user_answerInfo = async (req, res) => {
   }
 };
 
-module.exports = { user_get, user_answerInfo };
+const user_starInfo = async (req, res) => {
+  const { userId, doubtId } = req.body;
+
+  try {
+    const user = await User.findOne({ _id: userId });
+    let starredDoubt = false;
+    console.log(user);
+    if (
+      user.user_starredDoubts.length > 0 &&
+      user.user_starredDoubts.includes(mongoose.Types.ObjectId(doubtId))
+    ) {
+      starredDoubt = true;
+    }
+
+    res.status(200).send(starredDoubt);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ msg: "unable to get starred doubt info" });
+  }
+};
+
+module.exports = { user_get, user_answerInfo, user_starInfo };

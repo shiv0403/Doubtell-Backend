@@ -59,4 +59,62 @@ const doubt_post = async (req, res) => {
   res.status(201).send({ msg: "doubt submitted" });
 };
 
-module.exports = { doubts_get, doubt_get, doubt_post };
+const doubt_star = async (req, res) => {
+  const { doubtId, userId } = req.body;
+  try {
+    const updatedDoubt = await Doubt.updateOne(
+      { _id: doubtId },
+      {
+        $inc: {
+          stars: 1,
+        },
+      }
+    );
+    const updatedUser = await User.updateOne(
+      { _id: userId },
+      {
+        $push: {
+          user_starredDoubts: doubtId,
+        },
+      }
+    );
+    res.status(200).send("doubt starred");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ msg: "unable to star the doubt" });
+  }
+};
+
+const doubt_unStar = async (req, res) => {
+  const { doubtId, userId } = req.body;
+  try {
+    const updatedDoubt = await Doubt.updateOne(
+      { _id: doubtId },
+      {
+        $inc: {
+          stars: -1,
+        },
+      }
+    );
+    const updatedUser = await User.updateOne(
+      { _id: userId },
+      {
+        $pull: {
+          user_starredDoubts: doubtId,
+        },
+      }
+    );
+    res.status(200).send("doubt un-starred");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ msg: "unable to un-star the doubt" });
+  }
+};
+
+module.exports = {
+  doubts_get,
+  doubt_get,
+  doubt_post,
+  doubt_star,
+  doubt_unStar,
+};

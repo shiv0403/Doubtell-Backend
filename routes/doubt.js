@@ -6,10 +6,14 @@ const {
   doubts_get,
   doubt_get,
   doubt_post,
+  doubt_star,
+  doubt_unStar,
 } = require("../controllers/doubtController");
 
 router.get("/get-doubts", doubts_get);
 router.post("/get-doubt", doubt_get);
 router.post("/submit", doubt_post);
+router.post("/star-doubt", doubt_star);
+router.post("/un-star-doubt", doubt_unStar);
 
 module.exports = router;
