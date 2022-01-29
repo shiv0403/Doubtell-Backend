@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const mongoose = require("mongoose");
 
 const user_get = async (req, res) => {
   const { id } = req.params;
@@ -16,9 +17,24 @@ const user_answerInfo = async (req, res) => {
   const { answerId, userId } = req.body;
   try {
     const user = await User.findOne({ _id: userId });
+    let userLiked = false,
+      userDisliked = false;
+    if (
+      user.user_likedPosts.length > 0 &&
+      user.user_likedPosts.includes(mongoose.Types.ObjectId(answerId))
+    ) {
+      userLiked = true;
+    }
+
+    if (
+      user.user_dislikedPosts.length > 0 &&
+      user.user_dislikedPosts.includes(mongoose.Types.ObjectId(answerId))
+    ) {
+      userDisliked = true;
+    }
     res.status(200).send({
-      user_likedPosts: user.user_likedPosts,
-      user_dislikedPosts: user.user_dislikedPosts,
+      userLiked,
+      userDisliked,
     });
   } catch (err) {
     console.log(err);
