@@ -28,7 +28,8 @@ const userSchema = new Schema(
     imgUrl: {
       type: String,
     },
-
+    user_likedPosts: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
+    user_dislikedPosts: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
     user_doubts: [{ type: Schema.Types.ObjectId, ref: "Doubt" }],
     user_answers: [{ type: Schema.Types.ObjectId, ref: "Answer" }],
     followers: [{ type: Schema.Types.ObjectId, ref: "User" }],

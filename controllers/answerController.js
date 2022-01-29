@@ -59,19 +59,171 @@ const answer_post = async (req, res) => {
 };
 
 const answer_like = async (req, res) => {
-  const { answerId } = req.body;
+  const { answerId, userId } = req.body;
 
   try {
-    const updatedAnswer = await Answer.updateOne(
-      { _id: answerId },
-      {
-        $set: {},
-      }
-    );
+    const user = await User.findOne({ _id: userId });
+    const isLiked =
+      user.user_likedPosts?.includes(mongoose.Types.ObjectId(answerId)) &&
+      user.user_likedPosts.length;
+    const isDisliked =
+      user.user_dislikedPosts?.includes(mongoose.Types.ObjectId(answerId)) &&
+      user.user_dislikedPosts.length;
+
+    //moving from dislike to like
+    if (isDisliked && !isLiked) {
+      const updatedAnswer = await Answer.updateOne(
+        { _id: answerId },
+        {
+          $inc: {
+            likes: 1,
+            disLikes: -1,
+          },
+        }
+      );
+      const updateUser = await User.updateOne(
+        { _id: userId },
+        {
+          $push: {
+            user_likedPosts: answerId,
+          },
+          $pull: {
+            user_dislikedPosts: answerId,
+          },
+        }
+      );
+    }
+
+    //liking first time
+    if (!isLiked && !isDisliked) {
+      const updatedAnswer = await Answer.updateOne(
+        { _id: answerId },
+        {
+          $inc: {
+            likes: 1,
+          },
+        }
+      );
+      const updateUser = await User.updateOne(
+        { _id: userId },
+        {
+          $push: {
+            user_likedPosts: answerId,
+          },
+        }
+      );
+    }
+
+    //liking again / removing like
+    if (isLiked) {
+      const updatedAnswer = await Answer.updateOne(
+        { _id: answerId },
+        {
+          $inc: {
+            likes: -1,
+          },
+        }
+      );
+      const updateUser = await User.updateOne(
+        { _id: userId },
+        {
+          $pull: {
+            user_likedPosts: answerId,
+          },
+        }
+      );
+    }
+    res.status(200).send("Answer liked");
   } catch (err) {
     console.log(err);
     res.status(400).send({ err: "Failed to like the answer" });
   }
 };
 
-module.exports = { answer_post, answers_post };
+const answer_dislike = async (req, res) => {
+  const { answerId, userId } = req.body;
+  try {
+    const user = await User.findOne({ _id: userId });
+
+    const isLiked =
+      user.user_likedPosts?.includes(mongoose.Types.ObjectId(answerId)) &&
+      user.user_likedPosts.length;
+    const isDisliked =
+      user.user_dislikedPosts?.includes(mongoose.Types.ObjectId(answerId)) &&
+      user.user_dislikedPosts.length;
+
+    //moving from like to dislike
+    if (isLiked && !isDisliked) {
+      const updatedAnswer = await Answer.updateOne(
+        { _id: answerId },
+        {
+          $inc: {
+            likes: -1,
+            disLikes: 1,
+          },
+        }
+      );
+
+      const updatedUser = await User.updateOne(
+        { _id: userId },
+        {
+          $push: {
+            user_dislikedPosts: answerId,
+          },
+          $pull: {
+            user_likedPosts: answerId,
+          },
+        }
+      );
+    }
+
+    //disliking for first time
+    if (!isLiked && !isDisliked) {
+      const updatedAnswer = await Answer.updateOne(
+        { _id: answerId },
+        {
+          $inc: {
+            disLikes: 1,
+          },
+        }
+      );
+
+      const updatedUser = await User.updateOne(
+        { _id: userId },
+        {
+          $push: {
+            user_dislikedPosts: answerId,
+          },
+        }
+      );
+    }
+
+    //disliking again (removing dislike)
+    if (isDisliked) {
+      const updatedAnswer = await Answer.updateOne(
+        { _id: answerId },
+        {
+          $inc: {
+            disLikes: -1,
+          },
+        }
+      );
+
+      const updatedUser = await User.updateOne(
+        { _id: userId },
+        {
+          $pull: {
+            user_dislikedPosts: answerId,
+          },
+        }
+      );
+    }
+
+    res.status(200).send("Answer Disliked");
+  } catch (err) {
+    console.log(err);
+    res.status(500).send({ msg: "unable to dislike the answer" });
+  }
+};
+
+module.exports = { answer_post, answers_post, answer_like, answer_dislike };
