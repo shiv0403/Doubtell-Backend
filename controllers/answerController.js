@@ -1,6 +1,7 @@
 const Answer = require("../models/Answer");
 const Doubt = require("../models/Doubt");
 const User = require("../models/User");
+const Comment = require("../models/Comment");
 const mongoose = require("mongoose");
 
 const answers_post = async (req, res) => {

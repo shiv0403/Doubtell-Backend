@@ -43,6 +43,7 @@ const userRoutes = require("./routes/user");
 const answerRoutes = require("./routes/answer");
 const conversationRoutes = require("./routes/conversation");
 const messageRoutes = require("./routes/message");
+const commentRoutes = require("./routes/comment");
 const { checkUser } = require("./Middlewares/authMiddleware");
 
 const PORT = process.env.PORT || 8080;
@@ -56,6 +57,7 @@ app.use("/api/user", userRoutes);
 app.use("/api/answer", answerRoutes);
 app.use("/api/conversation", conversationRoutes);
 app.use("/api/message", messageRoutes);
+app.use("/api/comment", commentRoutes);
 
 app.get("/", (req, res) => {
   res.send("This is home route");
