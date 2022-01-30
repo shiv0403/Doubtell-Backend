@@ -111,10 +111,25 @@ const doubt_unStar = async (req, res) => {
   }
 };
 
+const doubt_trendings = async (req, res) => {
+  try {
+    let doubts = await Doubt.aggregate([
+      {
+        $sort: { stars: -1 },
+      },
+    ]);
+    res.status(200).send(doubts.slice(0, 5));
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Unable to get trendings");
+  }
+};
+
 module.exports = {
   doubts_get,
   doubt_get,
   doubt_post,
   doubt_star,
   doubt_unStar,
+  doubt_trendings,
 };
