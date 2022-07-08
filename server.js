@@ -23,20 +23,21 @@ app.use(bodyParser.json());
 app.use(
   cors({
     origin: "https://doubtell-main.netlify.app/",
+    credentials: true,
   })
 );
-app.use((req, res, next) => {
-  const allowedOrigins = ["https://doubtell-main.netlify.app/"];
-  const origin = req.headers.origin;
-  if (allowedOrigins.includes(origin)) {
-    res.setHeader("Access-Control-Allow-Origin", origin);
-  }
+// app.use((req, res, next) => {
+//   const allowedOrigins = ["https://doubtell-main.netlify.app/"];
+//   const origin = req.headers.origin;
+//   if (allowedOrigins.includes(origin)) {
+//     res.setHeader("Access-Control-Allow-Origin", origin);
+//   }
 
-  res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  res.header("Access-Control-Allow-Credentials", true);
-  return next();
-});
+//   res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
+//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+//   res.header("Access-Control-Allow-Credentials", true);
+//   return next();
+// });
 
 app.use("/public", express.static("public"));
 
