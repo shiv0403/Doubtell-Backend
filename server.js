@@ -20,6 +20,11 @@ app.use(morgan("tiny"));
 app.use(helmet());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use(
+  cors({
+    origin: "https://doubtell-main.netlify.app/",
+  })
+);
 app.use((req, res, next) => {
   const allowedOrigins = ["https://doubtell-main.netlify.app/"];
   const origin = req.headers.origin;
