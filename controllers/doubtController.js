@@ -3,11 +3,18 @@ const Answer = require("../models/Answer");
 const User = require("../models/User");
 
 const doubts_get = async (req, res) => {
+  const search = req.query.search;
+  const category = req.query.category;
+
+  let query = [{ doubt: { $regex: search } }];
+
+  if (category) {
+    query.push({ category });
+  }
   try {
-    const doubts = await Doubt.find(
-      {},
-      { doubt: 1, author_id: 1, author_name: 1 }
-    );
+    const doubts = await Doubt.find({
+      $and: query,
+    });
 
     res.status(200).send(doubts);
   } catch (err) {

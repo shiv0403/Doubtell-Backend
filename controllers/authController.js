@@ -3,7 +3,6 @@ const { handleErrors } = require("../utils/authErrors");
 const { createToken } = require("../utils/jwt");
 
 const login_post = async (req, res) => {
-  console.log(User.findOne({ email: "shivi@email.com" }));
   const { email, password } = req.body.data;
   try {
     const user = await User.login(email, password);
@@ -22,7 +21,7 @@ const login_post = async (req, res) => {
 
 const signup_post = async (req, res) => {
   const { name, email, password, confirmPassword, age } = req.body.data;
-
+  console.log(req.body);
   if (password !== confirmPassword) {
     res.status(400).send({ msg: "Both the passwords must match" });
   }
@@ -42,7 +41,6 @@ const signup_post = async (req, res) => {
 };
 
 const logout_get = (req, res) => {
-  console.log("logout route!");
   res.cookie("jwt", "", { maxAge: 1 });
   res.status(200).send({ msg: "logged out" });
 };

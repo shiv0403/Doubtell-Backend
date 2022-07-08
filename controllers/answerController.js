@@ -5,7 +5,6 @@ const Comment = require("../models/Comment");
 const mongoose = require("mongoose");
 
 const answers_post = async (req, res) => {
-  console.log(req.body);
   const { answersId } = req.body;
 
   let newIds = [];
@@ -18,7 +17,7 @@ const answers_post = async (req, res) => {
         $in: newIds,
       },
     });
-    console.log(answers);
+
     res.status(200).send(answers);
   } catch (err) {
     console.log(err);

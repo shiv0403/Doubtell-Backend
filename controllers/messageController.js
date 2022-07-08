@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 
 const messages_get = async (req, res) => {
   const { conversationId } = req.params;
-  console.log(conversationId);
+
   try {
     const messages = await Message.find({
       conversationId,
@@ -17,7 +17,7 @@ const messages_get = async (req, res) => {
 
 const message_post = async (req, res) => {
   const { conversationId, message, senderId } = req.body;
-  console.log(req.body);
+
   try {
     const messageCreated = await Message.create({
       conversationId,
