@@ -3,8 +3,8 @@ const Answer = require("../models/Answer");
 const User = require("../models/User");
 
 const doubts_get = async (req, res) => {
-  const search = req.query.search;
-  const category = req.query.category;
+  const search = req.query.search || "";
+  const category = req.query.category || "";
 
   let query = [{ doubt: { $regex: search } }];
 
