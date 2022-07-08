@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: "https://doubtell-main.netlify.app/",
+    origin: "https://doubtell-main.netlify.app",
     credentials: true,
   })
 );
