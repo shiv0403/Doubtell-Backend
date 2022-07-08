@@ -41,29 +41,33 @@ const doubt_get = async (req, res) => {
 
 const doubt_post = async (req, res) => {
   const { content, userId, category, filenames, userName } = req.body;
-  let doubt_imgs = [];
-  for (let key = 0; key < filenames.length; ++key) {
-    doubt_imgs.push(filenames[key].filename);
-  }
-  const doubt = await Doubt.create({
-    doubt: content,
-    author_id: userId,
-    category,
-    doubt_imgs,
-    author_name: userName,
-  });
 
-  const updatedUser = await User.updateOne(
-    { _id: doubt.author_id },
-    {
-      $push: {
-        user_doubts: doubt._id,
-      },
+  try {
+    let doubt_imgs = [];
+    for (let key = 0; key < filenames.length; ++key) {
+      doubt_imgs.push(filenames[key].filename);
     }
-  );
+    const doubt = await Doubt.create({
+      doubt: content,
+      author_id: userId,
+      category,
+      doubt_imgs,
+      author_name: userName,
+    });
 
-  console.log(updatedUser);
-  res.status(201).send({ msg: "doubt submitted" });
+    const updatedUser = await User.updateOne(
+      { _id: doubt.author_id },
+      {
+        $push: {
+          user_doubts: doubt._id,
+        },
+      }
+    );
+
+    res.status(201).send({ msg: "doubt submitted" });
+  } catch (err) {
+    res.status(500).send(err.message);
+  }
 };
 
 const doubt_star = async (req, res) => {
