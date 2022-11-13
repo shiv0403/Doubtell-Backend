@@ -22,7 +22,7 @@ const conversation_post = async (req, res) => {
         $all: [senderId, receiverId],
       },
     });
-    console.log("conversation exists", conversationExists);
+    // console.log("conversation exists", conversationExists);
     if (conversationExists.length === 0) {
       const conversation = await Conversation.create({
         membersId: [senderId, receiverId],
