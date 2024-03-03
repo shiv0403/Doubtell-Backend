@@ -11,10 +11,8 @@ const cookieParser = require("cookie-parser");
 const app = express();
 dotenv.config();
 
-//mongodb
 require("./db");
 
-//basic middlewares
 app.use(cookieParser());
 app.use(morgan("tiny"));
 app.use(helmet());
@@ -22,23 +20,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(
   cors({
-    origin: "https://doubtell-main.netlify.app",
+    origin: ["https://doubtell-main.netlify.app", "http://localhost:3000"],
     credentials: true,
   })
 );
-// app.use((req, res, next) => {
-//   const allowedOrigins = ["https://doubtell-main.netlify.app/"];
-//   const origin = req.headers.origin;
-//   if (allowedOrigins.includes(origin)) {
-//     res.setHeader("Access-Control-Allow-Origin", origin);
-//   }
-
-//   res.header("Access-Control-Allow-Methods", "GET, OPTIONS");
-//   res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-//   res.header("Access-Control-Allow-Credentials", true);
-//   return next();
-// });
-
 app.use("/public", express.static("public"));
 
 //importing routes
@@ -66,7 +51,7 @@ app.use("/api/message", messageRoutes);
 app.use("/api/comment", commentRoutes);
 
 app.get("/", (req, res) => {
-  res.send("This is home route");
+  res.send("Server is healthy");
 });
 
 //app listening on PORT
